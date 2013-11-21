@@ -163,6 +163,13 @@ EventEmitter.prototype.emit = function ( event ) {
     return this;
 };
 
+/**
+ * Trigger an event
+ */
+EventEmitter.prototype.trigger = function ( type ) {
+    return this.emit({type:type});
+};
+
     </pre>
 </div>
 

@@ -171,6 +171,22 @@ Diagram.prototype.destroyBox = function(b){
 };
 
 /**
+ * Delete a box in the diagram
+ * @method destroyBox
+ * @param  {Object} options
+ */
+Diagram.prototype.destroyLine = function(l){
+    var i = this.lines.indexOf(l);
+    if(i!=-1)
+        this.lines.splice(i,1);
+    l.emitDestroy();
+    this.emit({
+        type : &quot;destroyLine&quot;,
+        line : l,
+    });
+};
+
+/**
  * Get the bounding box of the diagram contents
  * @method getBoundingBox
  */

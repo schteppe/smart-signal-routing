@@ -101,6 +101,7 @@
 var EventEmitter = require(&#x27;./EventEmitter&#x27;).EventEmitter
 ,   LineNode = require(&#x27;./LineNode&#x27;).LineNode
 ,   LineSegment = require(&#x27;./LineSegment&#x27;).LineSegment
+,   Vec2 = require(&#x27;./Vec2&#x27;).Vec2
 ,   PF = require(&#x27;pathfinding&#x27;)
 
 exports.Line = Line;
@@ -130,6 +131,8 @@ Line.prototype = new Object(EventEmitter.prototype);
  */
 Line.prototype.setTo = function(connectorOrVec2) {
     this.to = connectorOrVec2;
+    if(!(connectorOrVec2 instanceof Vec2))
+        connectorOrVec2.lines.push(this);
     return this;
 };
 
@@ -140,7 +143,7 @@ Line.prototype.setTo = function(connectorOrVec2) {
 Line.prototype.reset = function() {
     this.nodes.length = 0;
     this.segments.length = 0;
-}
+};
 
 /**
  * Emit the change event
@@ -151,12 +154,33 @@ Line.prototype.emitChange = function() {
     this.emit({
         type:&quot;change&quot;,
     });
-}
+};
+
+/**
+ * Emit an event signalling that one of the line ends moved
+ * @method emitEndsChange
+ * @private
+ */
+Line.prototype.emitEndsChange = function() {
+    this.emit({
+        type:&quot;endsChange&quot;,
+    });
+};
+
+/**
+ * @method emitDestroy
+ * @private
+ */
+Line.prototype.emitDestroy = function() {
+    this.emit({
+        type:&quot;destroy&quot;,
+    });
+};
 
 /**
  * Compute the Line path, using as little effort as possible.
  * @method setSimple
- * @todo
+ * @todo Should go from box margin?
  */
 Line.prototype.setSimple = function(){
     // Must runtime require connector here. Why? Cross require!
@@ -164,29 +188,23 @@ Line.prototype.setSimple = function(){
 
     this.reset();
 
-    var fromPos = this.from.getPosition();
-    var toPos = this.to instanceof Connector ? this.to.getPosition() : this.to;
+    var fromPos = this.from.getPosition(),
+        fromPos2 = this.from.getPosition(true),
+        toPos = this.to instanceof Connector ? this.to.getPosition() : this.to;
 
     // Add start point
-    var startNode = new LineNode({
-        x:fromPos.x,
-        y:fromPos.y,
-    });
-    this.nodes.push(startNode);
+    this.nodes.push(new LineNode(fromPos));
+    this.nodes.push(new LineNode(fromPos2));
 
     // Add middle point
     var middleNode = new LineNode({
-        x:fromPos.x,
+        x:fromPos2.x,
         y:toPos.y,
     });
     this.nodes.push(middleNode);
 
     // Add end point
-    var endNode = new LineNode({
-        x:toPos.x,
-        y:toPos.y,
-    });
-    this.nodes.push(endNode);
+    this.nodes.push(new LineNode(toPos));
 
     // Create segments
     this.generateSegments();
@@ -318,17 +336,19 @@ Line.prototype.setNice = function(){
         toNode = boxes[1].inputNode;
     var path = finder.findPath(fromNode,toNode,nodes);
 
-    for (var i = 0; i &lt; path.length; i++) {
-        var node = new LineNode({
-            x : path[i][0],
-            y : path[i][1],
-        });
-        this.nodes.push(node);
-    };
-
-    this.generateSegments();
-
-    this.emitChange();
+    if(path.length){
+        for (var i = 0; i &lt; path.length; i++) {
+            var node = new LineNode({
+                x : path[i][0],
+                y : path[i][1],
+            });
+            this.nodes.push(node);
+        };
+        this.generateSegments();
+        this.emitChange();
+    } else {
+        this.setSimple();
+    }
 
     return this;
 };

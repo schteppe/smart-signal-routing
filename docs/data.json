@@ -139,7 +139,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "src/Line.js",
-            "line": 8,
+            "line": 9,
             "description": "A line in the diagram.",
             "is_constructor": 1,
             "extends": "{EventEmitter}"
@@ -214,13 +214,14 @@
                 "type": "Box"
             },
             "todo": [
-                "Should check if it crosses other boxes - and stop if it does"
+                "Should check if it crosses other boxes - and stop if it does?",
+                "Emit event for end points of lines changing positions"
             ],
             "class": "Box"
         },
         {
             "file": "src/Box.js",
-            "line": 59,
+            "line": 60,
             "description": "Get the bounding box of the box, including the margin.",
             "itemtype": "method",
             "name": "getBoundingBox",
@@ -228,7 +229,7 @@
         },
         {
             "file": "src/Box.js",
-            "line": 72,
+            "line": 73,
             "description": "Get connectors on a given side.",
             "params": [
                 {
@@ -245,7 +246,7 @@
         },
         {
             "file": "src/Connector.js",
-            "line": 22,
+            "line": 34,
             "description": "Get the diagram position of this Connector",
             "itemtype": "method",
             "name": "getPosition",
@@ -253,14 +254,11 @@
                 "description": "",
                 "type": "Vec2"
             },
-            "todo": [
-                ""
-            ],
             "class": "Connector"
         },
         {
             "file": "src/Connector.js",
-            "line": 59,
+            "line": 76,
             "description": "Creates a Line connected to this Connector and to a point. The point is initially the same position as the connector.",
             "itemtype": "method",
             "name": "spawnLine",
@@ -272,7 +270,7 @@
         },
         {
             "file": "src/Connector.js",
-            "line": 73,
+            "line": 90,
             "description": "Clone this object",
             "itemtype": "method",
             "name": "clone",
@@ -338,6 +336,21 @@
         {
             "file": "src/Diagram.js",
             "line": 73,
+            "description": "Delete a box in the diagram",
+            "itemtype": "method",
+            "name": "destroyBox",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "Diagram"
+        },
+        {
+            "file": "src/Diagram.js",
+            "line": 89,
             "description": "Get the bounding box of the diagram contents",
             "itemtype": "method",
             "name": "getBoundingBox",
@@ -345,7 +358,7 @@
         },
         {
             "file": "src/Diagram.js",
-            "line": 81,
+            "line": 97,
             "description": "Run a hit test. Matches boxes and lines.",
             "itemtype": "method",
             "name": "hitTest",
@@ -372,7 +385,7 @@
         },
         {
             "file": "src/Diagram.js",
-            "line": 148,
+            "line": 164,
             "description": "Raycast a point onto other objects in the Diagram area.",
             "params": [
                 {
@@ -468,8 +481,14 @@
             "class": "EventEmitter"
         },
         {
+            "file": "src/EventEmitter.js",
+            "line": 66,
+            "description": "Trigger an event",
+            "class": "EventEmitter"
+        },
+        {
             "file": "src/Line.js",
-            "line": 25,
+            "line": 26,
             "description": "Set the \"to\" object that the line is supposed to connect to.",
             "itemtype": "method",
             "name": "setTo",
@@ -488,7 +507,7 @@
         },
         {
             "file": "src/Line.js",
-            "line": 36,
+            "line": 39,
             "description": "Empty this line",
             "itemtype": "method",
             "name": "reset",
@@ -496,7 +515,7 @@
         },
         {
             "file": "src/Line.js",
-            "line": 45,
+            "line": 48,
             "description": "Emit the change event",
             "itemtype": "method",
             "name": "emitChange",
@@ -506,18 +525,37 @@
         },
         {
             "file": "src/Line.js",
-            "line": 56,
+            "line": 59,
+            "description": "Emit an event signalling that one of the line ends moved",
+            "itemtype": "method",
+            "name": "emitEndsChange",
+            "access": "private",
+            "tagname": "",
+            "class": "Line"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 70,
+            "itemtype": "method",
+            "name": "emitDestroy",
+            "access": "private",
+            "tagname": "",
+            "class": "Line"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 80,
             "description": "Compute the Line path, using as little effort as possible.",
             "itemtype": "method",
             "name": "setSimple",
             "todo": [
-                ""
+                "Should go from box margin?"
             ],
             "class": "Line"
         },
         {
             "file": "src/Line.js",
-            "line": 99,
+            "line": 117,
             "description": "Compute the Line path, avoiding other boxes and lines in the Diagram. If no nice path could be found, the simplest path is used.",
             "itemtype": "method",
             "name": "setNice",
@@ -532,7 +570,7 @@
         },
         {
             "file": "src/Line.js",
-            "line": 354,
+            "line": 374,
             "description": "Compute the Line path, avoiding other boxes and lines in the Diagram, and try to change as little as possible of the path relative to the old Line.  If no nice path could be found, the simplest path is used.",
             "itemtype": "method",
             "name": "setMinDisturb",
@@ -547,7 +585,7 @@
         },
         {
             "file": "src/Line.js",
-            "line": 366,
+            "line": 386,
             "description": "Clone the line. Useful together with setMinDisturb().",
             "itemtype": "method",
             "name": "clone",
@@ -559,7 +597,7 @@
         },
         {
             "file": "src/Line.js",
-            "line": 383,
+            "line": 403,
             "description": "Generates new line segments given the current nodes.",
             "itemtype": "method",
             "name": "generateSegments",
@@ -691,15 +729,19 @@
     "warnings": [
         {
             "message": "Missing item type\nGet connectors on a given side.",
-            "line": " src/Box.js:72"
+            "line": " src/Box.js:73"
         },
         {
             "message": "Missing item type\nRaycast a point onto other objects in the Diagram area.",
-            "line": " src/Diagram.js:148"
+            "line": " src/Diagram.js:164"
         },
         {
             "message": "Missing item type\nEmit/dispatch an event",
             "line": " src/EventEmitter.js:48"
+        },
+        {
+            "message": "Missing item type\nTrigger an event",
+            "line": " src/EventEmitter.js:66"
         }
     ]
 }

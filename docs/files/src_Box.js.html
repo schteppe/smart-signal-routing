@@ -116,7 +116,7 @@ function Box(options){
     this.position = new Vec2(options.x||0 , options.y||0);
     this.width = options.width || 150;
     this.height = options.height || 100;
-    this.margin = 10;
+    this.margin = options.margin || 10;
     this.connectors = [];
 };
 Box.prototype = new Object(EventEmitter.prototype);
@@ -145,13 +145,14 @@ Box.prototype.createConnector = function(options){
  * @param  {Number} x
  * @param  {Number} y
  * @return {Box} Self
- * @todo Should check if it crosses other boxes - and stop if it does
+ * @todo Should check if it crosses other boxes - and stop if it does?
+ * @todo Emit event for end points of lines changing positions
  */
 Box.prototype.setPosition = function(x,y){
     this.position.x = x;
     this.position.y = y;
     this.emit({
-        type:&quot;setPosition&quot;
+        type:&quot;change&quot;
     });
     return this;
 };

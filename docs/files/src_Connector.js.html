@@ -116,6 +116,18 @@ function Connector(options){
     this.box =      options.box         || null;
     this.side =     options.side        || &quot;right&quot;;
     this.lines = []; // Connected lines
+
+    var that = this;
+
+    // Propagate change event
+    this.box.on(&quot;change&quot;,function(e){
+        that.emit({
+            type : &quot;change&quot;,
+        });
+        for (var i = 0; i &lt; that.lines.length; i++) {
+            that.lines[i].emitEndsChange();
+        };
+    });
 };
 Connector.prototype = new Object(EventEmitter.prototype);
 
@@ -123,31 +135,36 @@ Connector.prototype = new Object(EventEmitter.prototype);
  * Get the diagram position of this Connector
  * @method getPosition
  * @return {Vec2}
- * @todo
  */
-Connector.prototype.getPosition = function(){
+Connector.prototype.getPosition = function(addMargin){
     var p = new Vec2(),
         b = this.box,
         bp = b.position,
         pos = this.position,
         w = b.width,
-        h = b.height;
+        h = b.height,
+        m = b.margin;
+
     switch(this.side){
         case &quot;top&quot;:
             p.x = bp.x + w/2 * ( 1 + pos );
             p.y = bp.y;
+            if(addMargin) p.y += m;
             break;
         case &quot;left&quot;:
             p.x = bp.x;
             p.y = bp.y + h/2 * ( 1 + pos );
+            if(addMargin) p.x -= m;
             break;
         case &quot;right&quot;:
             p.x = bp.x + w;
             p.y = bp.y + h/2 * ( 1 + pos );
+            if(addMargin) p.x += m;
             break;
         case &quot;bottom&quot;:
             p.x = bp.x + w/2 * ( 1 + pos );
             p.y = bp.y + h;
+            if(addMargin) p.y -= m;
             break;
         default:
             throw new Error(&quot;Side not supported: &quot;+this.side);
@@ -164,9 +181,9 @@ Connector.prototype.getPosition = function(){
 Connector.prototype.spawnLine = function(){
     var l = this.box.diagram.createLine({
         from : this,
-        to : this.getPosition(),
+        to : this.getPosition(), // Add an initial position
     });
-
+    this.lines.push(l);
     return l;
 };
 
