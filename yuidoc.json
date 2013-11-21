@@ -3,7 +3,7 @@
     "description": "Base for a smarter block diagram editor.",
     "version": "0.0.1",
     "options": {
-        "outdir": "doc",
+        "outdir": "docs",
         "paths":  "src"
     }
 }
