@@ -1,0 +1,705 @@
+{
+    "project": {
+        "name": "Smart signal routing",
+        "description": "Base for a smarter block diagram editor.",
+        "version": "0.0.1"
+    },
+    "files": {
+        "src/Box.js": {
+            "name": "src/Box.js",
+            "modules": {},
+            "classes": {
+                "Box": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/Connector.js": {
+            "name": "src/Connector.js",
+            "modules": {},
+            "classes": {
+                "Connector": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/Diagram.js": {
+            "name": "src/Diagram.js",
+            "modules": {},
+            "classes": {
+                "Diagram": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/EventEmitter.js": {
+            "name": "src/EventEmitter.js",
+            "modules": {},
+            "classes": {
+                "EventEmitter": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/Line.js": {
+            "name": "src/Line.js",
+            "modules": {},
+            "classes": {
+                "Line": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/LineNode.js": {
+            "name": "src/LineNode.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/LineSegment.js": {
+            "name": "src/LineSegment.js",
+            "modules": {},
+            "classes": {
+                "LineNode": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/Vec2.js": {
+            "name": "src/Vec2.js",
+            "modules": {},
+            "classes": {
+                "Vec2": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "Box": {
+            "name": "Box",
+            "shortname": "Box",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/Box.js",
+            "line": 7,
+            "description": "A box in the diagram.",
+            "is_constructor": 1
+        },
+        "Connector": {
+            "name": "Connector",
+            "shortname": "Connector",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/Connector.js",
+            "line": 7,
+            "description": "A Connector on a box.",
+            "is_constructor": 1
+        },
+        "Diagram": {
+            "name": "Diagram",
+            "shortname": "Diagram",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/Diagram.js",
+            "line": 9,
+            "description": "The diagram area.",
+            "is_constructor": 1
+        },
+        "EventEmitter": {
+            "name": "EventEmitter",
+            "shortname": "EventEmitter",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/EventEmitter.js",
+            "line": 3,
+            "description": "Base class for other classes that wants to emit events.",
+            "is_constructor": 1
+        },
+        "Line": {
+            "name": "Line",
+            "shortname": "Line",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/Line.js",
+            "line": 8,
+            "description": "A line in the diagram.",
+            "is_constructor": 1,
+            "extends": "{EventEmitter}"
+        },
+        "LineNode": {
+            "name": "LineNode",
+            "shortname": "LineNode",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/LineSegment.js",
+            "line": 5,
+            "description": "A segment of a line, connecting a LineNodes (or a point) to another LineNode (or point).",
+            "is_constructor": 1,
+            "extends": "{EventEmitter}"
+        },
+        "Vec2": {
+            "name": "Vec2",
+            "shortname": "Vec2",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/Vec2.js",
+            "line": 3,
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/Box.js",
+            "line": 24,
+            "description": "Create a connector on one of the box sides",
+            "itemtype": "method",
+            "name": "createConnector",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "Self.",
+                "type": "Box"
+            },
+            "class": "Box"
+        },
+        {
+            "file": "src/Box.js",
+            "line": 42,
+            "description": "Set the box position",
+            "itemtype": "method",
+            "name": "setPosition",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "Self",
+                "type": "Box"
+            },
+            "todo": [
+                "Should check if it crosses other boxes - and stop if it does"
+            ],
+            "class": "Box"
+        },
+        {
+            "file": "src/Box.js",
+            "line": 59,
+            "description": "Get the bounding box of the box, including the margin.",
+            "itemtype": "method",
+            "name": "getBoundingBox",
+            "class": "Box"
+        },
+        {
+            "file": "src/Box.js",
+            "line": 72,
+            "description": "Get connectors on a given side.",
+            "params": [
+                {
+                    "name": "side",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "Box"
+        },
+        {
+            "file": "src/Connector.js",
+            "line": 22,
+            "description": "Get the diagram position of this Connector",
+            "itemtype": "method",
+            "name": "getPosition",
+            "return": {
+                "description": "",
+                "type": "Vec2"
+            },
+            "todo": [
+                ""
+            ],
+            "class": "Connector"
+        },
+        {
+            "file": "src/Connector.js",
+            "line": 59,
+            "description": "Creates a Line connected to this Connector and to a point. The point is initially the same position as the connector.",
+            "itemtype": "method",
+            "name": "spawnLine",
+            "return": {
+                "description": "",
+                "type": "Line"
+            },
+            "class": "Connector"
+        },
+        {
+            "file": "src/Connector.js",
+            "line": 73,
+            "description": "Clone this object",
+            "itemtype": "method",
+            "name": "clone",
+            "return": {
+                "description": "",
+                "type": "Connector"
+            },
+            "class": "Connector"
+        },
+        {
+            "file": "src/Diagram.js",
+            "line": 22,
+            "description": "Create a box in the diagram",
+            "itemtype": "method",
+            "name": "createBox",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Box"
+            },
+            "class": "Diagram"
+        },
+        {
+            "file": "src/Diagram.js",
+            "line": 40,
+            "description": "Create a line in the diagram",
+            "itemtype": "method",
+            "name": "createLine",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Line"
+            },
+            "class": "Diagram"
+        },
+        {
+            "file": "src/Diagram.js",
+            "line": 58,
+            "description": "Delete a box in the diagram",
+            "itemtype": "method",
+            "name": "destroyBox",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "Diagram"
+        },
+        {
+            "file": "src/Diagram.js",
+            "line": 73,
+            "description": "Get the bounding box of the diagram contents",
+            "itemtype": "method",
+            "name": "getBoundingBox",
+            "class": "Diagram"
+        },
+        {
+            "file": "src/Diagram.js",
+            "line": 81,
+            "description": "Run a hit test. Matches boxes and lines.",
+            "itemtype": "method",
+            "name": "hitTest",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "An array of objects that were hit.",
+                "type": "Array"
+            },
+            "todo": [
+                "should use bounding boxes"
+            ],
+            "class": "Diagram"
+        },
+        {
+            "file": "src/Diagram.js",
+            "line": 148,
+            "description": "Raycast a point onto other objects in the Diagram area.",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "direction",
+                    "description": "0=top, 1=right, 2=bottom, 3=left",
+                    "type": "Number"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "An array with [point1,object1,point2,object2...]",
+                "type": "Array"
+            },
+            "class": "Diagram"
+        },
+        {
+            "file": "src/EventEmitter.js",
+            "line": 12,
+            "description": "Add an event listener",
+            "itemtype": "method",
+            "name": "on",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "listener",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "Self.",
+                "type": "EventEmitter"
+            },
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src/EventEmitter.js",
+            "line": 31,
+            "description": "Remove an event lister",
+            "itemtype": "method",
+            "name": "off",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "listener",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "Self.",
+                "type": "EventEmitter"
+            },
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src/EventEmitter.js",
+            "line": 48,
+            "description": "Emit/dispatch an event",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "Self.",
+                "type": "EventEmitter"
+            },
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 25,
+            "description": "Set the \"to\" object that the line is supposed to connect to.",
+            "itemtype": "method",
+            "name": "setTo",
+            "params": [
+                {
+                    "name": "connectorOrVec2",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "Self.",
+                "type": "Line"
+            },
+            "class": "Line"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 36,
+            "description": "Empty this line",
+            "itemtype": "method",
+            "name": "reset",
+            "class": "Line"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 45,
+            "description": "Emit the change event",
+            "itemtype": "method",
+            "name": "emitChange",
+            "access": "private",
+            "tagname": "",
+            "class": "Line"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 56,
+            "description": "Compute the Line path, using as little effort as possible.",
+            "itemtype": "method",
+            "name": "setSimple",
+            "todo": [
+                ""
+            ],
+            "class": "Line"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 99,
+            "description": "Compute the Line path, avoiding other boxes and lines in the Diagram. If no nice path could be found, the simplest path is used.",
+            "itemtype": "method",
+            "name": "setNice",
+            "todo": [
+                ""
+            ],
+            "return": {
+                "description": "Self",
+                "type": "Line"
+            },
+            "class": "Line"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 354,
+            "description": "Compute the Line path, avoiding other boxes and lines in the Diagram, and try to change as little as possible of the path relative to the old Line.  If no nice path could be found, the simplest path is used.",
+            "itemtype": "method",
+            "name": "setMinDisturb",
+            "todo": [
+                ""
+            ],
+            "return": {
+                "description": "Self.",
+                "type": "Line"
+            },
+            "class": "Line"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 366,
+            "description": "Clone the line. Useful together with setMinDisturb().",
+            "itemtype": "method",
+            "name": "clone",
+            "return": {
+                "description": "",
+                "type": "Line"
+            },
+            "class": "Line"
+        },
+        {
+            "file": "src/Line.js",
+            "line": 383,
+            "description": "Generates new line segments given the current nodes.",
+            "itemtype": "method",
+            "name": "generateSegments",
+            "return": {
+                "description": "Self",
+                "type": "Line"
+            },
+            "class": "Line"
+        },
+        {
+            "file": "src/LineSegment.js",
+            "line": 21,
+            "description": "Sets the position of this linesegment. If it is horizontal, the position is along the the horizontal axis.",
+            "itemtype": "method",
+            "name": "setPosition",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "Self.",
+                "type": "Linesegment"
+            },
+            "todo": [
+                ""
+            ],
+            "class": "LineNode"
+        },
+        {
+            "file": "src/Vec2.js",
+            "line": 12,
+            "description": "Clone object",
+            "itemtype": "method",
+            "name": "clone",
+            "return": {
+                "description": "",
+                "type": "Vec2"
+            },
+            "class": "Vec2"
+        },
+        {
+            "file": "src/Vec2.js",
+            "line": 21,
+            "description": "Check if equal to other Vec2",
+            "itemtype": "method",
+            "name": "equal",
+            "params": [
+                {
+                    "name": "v",
+                    "description": "",
+                    "type": "Vec2"
+                },
+                {
+                    "name": "precision",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Vec2"
+        },
+        {
+            "file": "src/Vec2.js",
+            "line": 33,
+            "description": "Subtract",
+            "itemtype": "method",
+            "name": "subtract",
+            "params": [
+                {
+                    "name": "v",
+                    "description": "",
+                    "type": "Vec2"
+                },
+                {
+                    "name": "target",
+                    "description": "",
+                    "type": "Vec2"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Vec2"
+            },
+            "class": "Vec2"
+        },
+        {
+            "file": "src/Vec2.js",
+            "line": 47,
+            "description": "Get the squared length of the vector",
+            "itemtype": "method",
+            "name": "norm2",
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "Vec2"
+        },
+        {
+            "file": "src/Vec2.js",
+            "line": 56,
+            "description": "Length of the vector",
+            "itemtype": "method",
+            "name": "norm",
+            "params": [
+                {
+                    "name": "v",
+                    "description": "",
+                    "type": "Vec2"
+                },
+                {
+                    "name": "target",
+                    "description": "",
+                    "type": "Vec2"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Vec2"
+            },
+            "class": "Vec2"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nGet connectors on a given side.",
+            "line": " src/Box.js:72"
+        },
+        {
+            "message": "Missing item type\nRaycast a point onto other objects in the Diagram area.",
+            "line": " src/Diagram.js:148"
+        },
+        {
+            "message": "Missing item type\nEmit/dispatch an event",
+            "line": " src/EventEmitter.js:48"
+        }
+    ]
+}

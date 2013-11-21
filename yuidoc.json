@@ -1,0 +1,9 @@
+{
+    "name": "Smart signal routing",
+    "description": "Base for a smarter block diagram editor.",
+    "version": "0.0.1",
+    "options": {
+        "outdir": "doc",
+        "paths":  "src"
+    }
+}

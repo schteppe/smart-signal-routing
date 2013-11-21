@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="deps/dat.gui.js"></script>
+    <script src="deps/raphael.js"></script>
+    <script src="build/ssr.js"></script>
+    <script src="deps/jquery.js"></script>
+    <style type="text/css">
+        body {
+            overflow:hidden;
+            padding:0;
+            margin:0;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<script>
+
+$(document).ready(function(){
+
+    var boxAttributes =         { fill: "#adf" },
+        connectorAttributes =   { fill: "black", r:10 },
+        lineAttributes =        { "stroke-width" : 1, };
+
+    // Line currently being drawn
+    var currentLine,
+        currentConnector;
+
+    // Line dragging logic
+    $(document).mousemove(function(e){
+        if(currentLine){
+            currentLine.setTo(new SSR.Vec2(e.clientX,e.clientY));
+            currentLine.setSimple();
+        }
+    }).mouseup(function(){
+        if(currentLine){
+            if(currentConnector && currentConnector !== currentLine.from){
+                currentLine.setTo(currentConnector);
+                console.log(currentLine.from.side,currentLine.to.side);
+                currentLine.setNice();
+            } else {
+                d.destroyLine(currentLine);
+            }
+            currentLine = null;
+        }
+    });
+
+    // Create paper
+    var paper = Raphael("container", window.innerWidth, window.innerHeight);
+
+    // Our drawing diagram
+    var d = new SSR.Diagram();
+
+    // Set up GUI
+    var gui = new dat.GUI();
+    var s = {
+        margin:connectorAttributes.r,
+        boxWidth:150,
+        boxHeight:80,
+    };
+    gui.add(s, 'margin',     0, 100).onChange(function(margin){
+        connectorAttributes.radius = margin;
+        for(var i=0; i<d.boxes.length; i++){
+            d.boxes[i].margin = margin;
+            d.boxes[i].trigger("change");
+        }
+    });
+    gui.add(s, 'boxHeight', 10, 100).onChange(function(height){
+        for(var i=0; i<d.boxes.length; i++){
+            d.boxes[i].height = height;
+            d.boxes[i].trigger("change");
+        }
+    });
+    gui.add(s, 'boxWidth',  10, 200).onChange(function(width){
+        for(var i=0; i<d.boxes.length; i++){
+            d.boxes[i].width = width;
+            d.boxes[i].trigger("change");
+        }
+    });
+
+    // When a line is created, we want to add some event listeners to it
+    d.on("createLine",function(e){
+
+        function onLineChange(e){
+            // remove any old path
+            if(this.r) this.r.remove();
+
+            // Draw path
+            var pathString = "";
+            for(var i=0; i!==this.nodes.length; i++){
+                var p = this.nodes[i].position;
+                if(i==0)    pathString +=  "M"+p.x+","+p.y;
+                else        pathString += " L"+p.x+","+p.y;
+            }
+            this.r = paper.path(pathString);
+            this.r.attr(lineAttributes);
+        }
+
+        // Redraw the line on change
+        e.line
+            .on("change",onLineChange)
+            .on("destroy",function(e){
+                // remove anything drawed
+                this.r.remove();
+                this.off("change",onLineChange);
+            })
+            .trigger("change");
+    });
+
+    // Event handler for Box.on("change")
+    function updateRect(e){
+        this.r.attr({
+            x:      this.position.x,
+            y:      this.position.y,
+            width:  this.width,
+            height: this.height,
+        });
+        for(var i=0; i!==this.connectors.length; i++){
+            var c = this.connectors[i],
+                p = c.getPosition();
+            c.r.attr({
+                cx : p.x,
+                cy : p.y,
+            });
+
+            for(var j=0; j!==c.lines.length; j++){
+                c.lines[j].setNice();
+            }
+        }
+    }
+
+    // Create a couple of boxes
+    var b1 = d.createBox({
+        x : 110,
+        y : 130,
+        margin: s.margin,
+    }).on("change",updateRect);
+
+    var b2 = d.createBox({
+        x : 210,
+        y : 230,
+        margin: s.margin,
+    }).on("change",updateRect);
+
+    /*
+    var b3 = d.createBox({
+        x : 410,
+        y : 230,
+        margin: s.margin,
+    }).on("change",updateRect);
+    b3.createConnector({ side:"top",   position:0 });
+    */
+
+    // Create connectors
+    b1.createConnector({ side:"right", position:0 });
+    b2.createConnector({ side:"left",  position:0 });
+
+    // Handlers for box drag events
+    function dragBoxHandler(){
+        this.ox = this.attr("x");
+        this.oy = this.attr("y");
+    }
+    function moveBoxHandler(dx, dy){
+        var b = this.box;
+        // Update position
+        b.setPosition(this.ox + dx, this.oy + dy);
+    }
+    function mouseUpBoxHandler(){
+
+    }
+
+    // Handlers for box mouse events
+    var down = false;
+    function boxMouseDown(e){
+        down = true;
+    }
+    function boxMouseUp(e){
+        down = false;
+    }
+    function boxMouseOut(e){
+        currentConnector = null;
+        if(down){
+            down = false;
+            var l = this.connector.spawnLine();
+            l.setTo(new SSR.Vec2(e.clientX, e.clientY));
+            l.setSimple();
+            currentLine = l;
+        }
+    }
+    function boxMouseOver(e){
+        currentConnector = this.connector;
+    }
+
+    // Draw boxes and their connectors
+    for(var i=0; i!==d.boxes.length; i++){
+        var box = d.boxes[i];
+        var b = box.r = paper.rect(box.position.x, box.position.y, box.width, box.height);
+        b.attr(boxAttributes);
+        b.drag(moveBoxHandler,dragBoxHandler,mouseUpBoxHandler);
+        b.box = box;
+
+        for(var j=0; j!==box.connectors.length; j++){
+            var c = box.connectors[j],
+                p = c.getPosition();
+            c.r = paper.circle(p.x,p.y,10).attr(connectorAttributes);
+            c.r.connector = c;
+
+            // Mosue events
+            c.r .mousedown(boxMouseDown)
+                .mouseover(boxMouseOver)
+                .mouseup  (boxMouseUp)
+                .mouseout (boxMouseOut);
+        }
+    }
+
+});
+</script>
+</body>
+</html>
