@@ -1,9 +1,6 @@
 {
   "name": "smart-signal-routing",
   "version": "0.1.0",
-  "dependencies": {
-    "pathfinding":"git://github.com/schteppe/PathFinding3D.js.git#e807f8e504a92cefce70018476879be481854fc0"
-  },
   "devDependencies":{
     "grunt":"~0.4.0",
     "grunt-contrib-jshint": "~0.1.1",
@@ -11,6 +8,7 @@
     "grunt-contrib-concat": "~0.1.3",
     "grunt-contrib-uglify": "*",
     "grunt-browserify":"*",
+    "browserify":"*",
     "pathfinding":"git://github.com/schteppe/PathFinding3D.js.git#e807f8e504a92cefce70018476879be481854fc0",
     "underscore":"*"
   }
